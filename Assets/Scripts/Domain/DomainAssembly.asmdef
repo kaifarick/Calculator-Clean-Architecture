@@ -1,0 +1,16 @@
+{
+    "name": "DomainAssembly",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d43cd07d68d3c4318b025a7b9577e1e2"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
