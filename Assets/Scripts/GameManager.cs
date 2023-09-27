@@ -1,17 +1,15 @@
-
-using TMPro;
 using UnityEngine;
 using Zenject;
 
 public class GameManager : MonoBehaviour
 {
 
-    [Inject] private ICalculatorPresenter _calculatorPresenter;
+    [Inject] private ICounterUsecase _counterUsecase;
 
     [SerializeField] private CalculatorView _calculatorView;
 
     void Start()
     {
-        _calculatorPresenter.Initialize(_calculatorView);
+        _calculatorView.Initialize(_counterUsecase.GetExpression());
     }
 }

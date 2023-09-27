@@ -19,20 +19,22 @@ public class CalculatorView : MonoBehaviour
     private List<ResultElement> _resultElements = new List<ResultElement>();
     
     private const int MAX_ELEMENT_COUNT = 6;
-
-    public event Action OnResultButtonClickAction;
-    public event Action<string> OnUpdateExpressionAction;
     
+    
+    [Inject] private ICalculatorPresenter _calculatorPresenter;
     
     private void Awake()
     {
-        _button.onClick.AddListener(() => OnResultButtonClickAction?.Invoke());
-        _inputField.onValueChanged.AddListener((arg0 => OnUpdateExpressionAction?.Invoke(arg0)));
+        _button.onClick.AddListener(_calculatorPresenter.SetResult);
+        _inputField.onValueChanged.AddListener(_calculatorPresenter.UpdateExpression);
+        
     }
 
     public void Initialize(string saveExpression)
     {
         _inputField.text = saveExpression;
+
+       _calculatorPresenter.OnOperationCompleteAction += OnOperationComplete;
     }
 
     public void OnOperationComplete(string result)

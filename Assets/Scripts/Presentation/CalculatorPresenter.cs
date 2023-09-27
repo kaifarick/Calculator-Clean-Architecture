@@ -1,4 +1,4 @@
-
+using System;
 
 public class CalculatorPresenter: ICalculatorPresenter
 {
@@ -6,24 +6,15 @@ public class CalculatorPresenter: ICalculatorPresenter
     private ICounterUsecase _counterUsecase;
     private ISaverUsecase _saverUsecase;
 
-    private CalculatorView _calculatorView;
+    public event Action<string> OnOperationCompleteAction;
     
+
     public CalculatorPresenter(ICounterUsecase counterUsecase, ISaverUsecase saverUsecase)
     {
         _counterUsecase = counterUsecase;
         _saverUsecase = saverUsecase;
 
         counterUsecase.OnOperationCompleteAction += OnOperationComplete;
-    }
-
-    public void Initialize(CalculatorView calculatorView)
-    {
-        _calculatorView = calculatorView;
-        
-        _calculatorView.OnUpdateExpressionAction += UpdateExpression;
-        _calculatorView.OnResultButtonClickAction += SetResult;
-        
-        _calculatorView.Initialize(_counterUsecase.GetExpression());
     }
 
 
@@ -41,7 +32,7 @@ public class CalculatorPresenter: ICalculatorPresenter
 
     private void OnOperationComplete(string result)
     {
-        _calculatorView.OnOperationComplete(result);
+        OnOperationCompleteAction?.Invoke(result);
     }
     
 }
