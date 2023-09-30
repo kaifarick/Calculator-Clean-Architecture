@@ -1,8 +1,10 @@
 
+using UnityEngine;
 using Zenject;
 
 public class SceneInstaller : MonoInstaller
 {
+    [SerializeField] private CalculatorView _calculatorView;
     public override void InstallBindings()
     {
 
@@ -10,6 +12,7 @@ public class SceneInstaller : MonoInstaller
         var saverUsecase = new SaverUsecase(gateway);
         var counterUsecase = new CounterUsecase(gateway);
         var presenter = new CalculatorPresenter(counterUsecase, saverUsecase);
+        presenter.Initialize(_calculatorView);
         
 
         Container
