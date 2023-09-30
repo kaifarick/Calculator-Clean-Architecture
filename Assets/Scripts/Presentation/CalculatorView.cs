@@ -28,13 +28,13 @@ public class CalculatorView : MonoBehaviour
         _button.onClick.AddListener(_calculatorPresenter.SetResult);
         _inputField.onValueChanged.AddListener(_calculatorPresenter.UpdateExpression);
         
+        _calculatorPresenter.OnOperationCompleteAction += OnOperationComplete;
+        
     }
 
     public void Initialize(string saveExpression)
     {
         _inputField.text = saveExpression;
-
-       _calculatorPresenter.OnOperationCompleteAction += OnOperationComplete;
     }
 
     public void OnOperationComplete(string result)

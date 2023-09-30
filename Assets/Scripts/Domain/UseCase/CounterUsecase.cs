@@ -23,7 +23,7 @@ public class CounterUsecase : ICounterUsecase
 
         if (stringExp.All(c => _allowedCharacters.Contains(c)) && stringExp.Contains("+") && !stringExp.Contains("++"))
         {
-            var result = stringExp.Split('+').Select(s => Convert.ToInt32(s)).Sum();
+            var result = stringExp.Split('+').Select(s => Convert.ToInt64(s)).Sum();
             var newResultString = $"{stringExp}={result}";
             
             OnOperationCompleteAction?.Invoke(newResultString);
