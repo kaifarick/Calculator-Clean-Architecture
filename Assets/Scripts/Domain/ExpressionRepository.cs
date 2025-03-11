@@ -1,10 +1,10 @@
 
 
-public class ExpressionDbGateway : IExpressionDbGateway
+public class ExpressionRepository : IExpressionRepository
 {
     private Expression _expression;
 
-    public ExpressionDbGateway()
+    public ExpressionRepository()
     {
         _expression = new Expression();
     }

@@ -6,28 +6,16 @@ public class SceneInstaller : MonoInstaller
     public override void InstallBindings()
     {
 
-        var gateway = new ExpressionDbGateway();
-        var saverUsecase = new SaverUsecase(gateway);
+        var gateway = new ExpressionRepository();
+        var storage = new PlayerPrefsDataStorage();
+        var saverUsecase = new ExpressionStorageUseCase(gateway, storage);
         var counterUsecase = new CounterUsecase(gateway);
         var presenter = new CalculatorPresenter(counterUsecase, saverUsecase);
         
-
-        Container
-            .Bind<IExpressionDbGateway>()
-            .FromInstance(gateway);
-
-        Container
-            .Bind<ICounterUsecase>()
-            .FromInstance(counterUsecase);
-        
-        Container
-            .Bind<ISaverUsecase>()
-            .FromInstance(saverUsecase);
-
-        Container
-            .Bind<ICalculatorPresenter>()
-            .FromInstance(presenter);
-        
-
+        Container.Bind<IExpressionRepository>().FromInstance(gateway);
+        Container.Bind<IDataStorage>().FromInstance(storage);
+        Container.Bind<ISaverUsecase>().FromInstance(saverUsecase);
+        Container.Bind<ICounterUsecase>().FromInstance(counterUsecase);
+        Container.Bind<ICalculatorPresenter>().FromInstance(presenter);
     }
 }

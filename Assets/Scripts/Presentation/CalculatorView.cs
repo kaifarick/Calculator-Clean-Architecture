@@ -30,11 +30,10 @@ public class CalculatorView : MonoBehaviour
         
     }
 
-    public void Initialize(string saveExpression)
+    private void Start()
     {
-        _inputField.text = saveExpression;
-
-       _calculatorPresenter.OnOperationCompleteAction += OnOperationComplete;
+        _inputField.text = _calculatorPresenter.GetInitialExpression();
+        _calculatorPresenter.OnOperationCompleteAction += OnOperationComplete;
     }
 
     public void OnOperationComplete(string result)
@@ -51,5 +50,13 @@ public class CalculatorView : MonoBehaviour
        }
        
        _inputField.text = "";
+    }
+    
+    private void OnDestroy()
+    {
+        _calculatorPresenter.OnOperationCompleteAction -= OnOperationComplete;
+        
+        _button.onClick.RemoveListener(_calculatorPresenter.SetResult);
+        _inputField.onValueChanged.RemoveListener(_calculatorPresenter.UpdateExpression);
     }
 }

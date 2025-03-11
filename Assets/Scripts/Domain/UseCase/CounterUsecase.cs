@@ -5,11 +5,11 @@ public class CounterUsecase : ICounterUsecase
 {
     private  char[] _allowedCharacters = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+'};
 
-    private IExpressionDbGateway _gateway;
+    private IExpressionRepository _gateway;
 
     public event Action<string> OnOperationCompleteAction;
     
-    public CounterUsecase(IExpressionDbGateway gateway)
+    public CounterUsecase(IExpressionRepository gateway)
     {
         _gateway = gateway;
     }
