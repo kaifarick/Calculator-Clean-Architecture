@@ -18,12 +18,11 @@ public class CounterUsecase : ICounterUsecase
     public void CalculateExpression()
     {
         var stringExp = _gateway.GetExpression();
-        //stringExp = stringExp.Replace(" ", "");
         if(string.IsNullOrEmpty(stringExp)) return;
 
         if (stringExp.All(c => _allowedCharacters.Contains(c)) && stringExp.Contains("+") && !stringExp.Contains("++"))
         {
-            var result = stringExp.Split('+').Select(s => Convert.ToInt32(s)).Sum();
+            var result = stringExp.Split('+').Select(s => Convert.ToInt64(s)).Sum();
             var newResultString = $"{stringExp}={result}";
             
             OnOperationCompleteAction?.Invoke(newResultString);
