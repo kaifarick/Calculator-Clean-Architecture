@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
-public class CalculatorView : MonoBehaviour
+public class CalculatorView : MonoBehaviour, ICalculatorView
 {
     [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private VerticalLayoutGroup _verticalLayoutGroup;
@@ -16,24 +15,35 @@ public class CalculatorView : MonoBehaviour
     
     [SerializeField] private Button _button;
 
-    private List<ResultElement> _resultElements = new List<ResultElement>();
+    private List<ResultElement> _resultElements = new();
     
     private const int MAX_ELEMENT_COUNT = 6;
     
     
-    [Inject] private ICalculatorPresenter _calculatorPresenter;
+    public event Action<string> OnExpressionChanged;
+    public event Action OnCalculatePressed;
+    
     
     private void Awake()
     {
-        _button.onClick.AddListener(_calculatorPresenter.SetResult);
-        _inputField.onValueChanged.AddListener(_calculatorPresenter.UpdateExpression);
-        
+        _inputField.onValueChanged.AddListener(ExpressionChanged);
+        _button.onClick.AddListener(CalculatePressed);
     }
 
-    private void Start()
+    private void CalculatePressed()
     {
-        _inputField.text = _calculatorPresenter.GetInitialExpression();
-        _calculatorPresenter.OnOperationCompleteAction += OnOperationComplete;
+        OnCalculatePressed?.Invoke();
+    }
+
+    private void ExpressionChanged(string value)
+    {
+        OnExpressionChanged?.Invoke(value);
+    }
+    
+
+    public void SetValueInField(string result)
+    {
+        _inputField.text = result;
     }
 
     public void OnOperationComplete(string result)
@@ -49,14 +59,12 @@ public class CalculatorView : MonoBehaviour
            _verticalLayoutGroup.childControlHeight = false;
        }
        
-       _inputField.text = "";
+       SetValueInField("");
     }
-    
+
     private void OnDestroy()
     {
-        _calculatorPresenter.OnOperationCompleteAction -= OnOperationComplete;
-        
-        _button.onClick.RemoveListener(_calculatorPresenter.SetResult);
-        _inputField.onValueChanged.RemoveListener(_calculatorPresenter.UpdateExpression);
+        _inputField.onValueChanged.RemoveListener(ExpressionChanged);
+        _button.onClick.RemoveListener(CalculatePressed);
     }
 }

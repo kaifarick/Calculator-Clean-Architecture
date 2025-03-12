@@ -1,25 +1,24 @@
 using System;
 
-public class CalculatorPresenter: ICalculatorPresenter
+public class CalculatorPresenter: ICalculatorPresenter, IDisposable
 {
-    
+    private ICalculatorView _view;
     private ICounterUsecase _counterUsecase;
     private ISaverUsecase _saverUsecase;
 
-    public event Action<string> OnOperationCompleteAction;
-    
-    private bool _disposed = false;
-
-    public CalculatorPresenter(ICounterUsecase counterUsecase, ISaverUsecase saverUsecase)
+    public CalculatorPresenter(ICounterUsecase counterUsecase, ISaverUsecase saverUsecase, ICalculatorView view)
     {
+        _view = view;
         _counterUsecase = counterUsecase;
         _saverUsecase = saverUsecase;
-
-        counterUsecase.OnOperationCompleteAction += OnOperationComplete;
+        
+        _view.OnExpressionChanged += UpdateExpression;
+        _view.OnCalculatePressed += CalculateExpression;
+        _counterUsecase.OnOperationCompleteAction += OnOperationComplete;
+        
+        _view.SetValueInField(GetInitialExpression());
     }
-
-
-    public void SetResult()
+    public void CalculateExpression()
     {
         _counterUsecase.CalculateExpression();
     }
@@ -38,16 +37,13 @@ public class CalculatorPresenter: ICalculatorPresenter
 
     private void OnOperationComplete(string result)
     {
-        OnOperationCompleteAction?.Invoke(result);
+        _view.OnOperationComplete(result);
     }
     
     public void Dispose()
-    {
-        if (!_disposed)
-        {
-            _counterUsecase.OnOperationCompleteAction -= OnOperationComplete;
-            _disposed = true;
-        }
+    { 
+        _view.OnExpressionChanged -= UpdateExpression;
+        _view.OnCalculatePressed -= CalculateExpression;
+        _counterUsecase.OnOperationCompleteAction -= OnOperationComplete;
     }
-    
 }
