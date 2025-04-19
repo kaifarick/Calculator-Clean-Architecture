@@ -1,7 +1,6 @@
-
 public class ExpressionStorageUseCase : ISaverUsecase
 {
-    private const string DATA_KEY = "dataKey";
+    private const string DATA_KEY = "EXPRESSION_SAVE";
 
     private IExpressionRepository _expressionRepository;
     private readonly IDataStorage _dataStorage;

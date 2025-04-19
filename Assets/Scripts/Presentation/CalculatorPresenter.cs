@@ -16,8 +16,10 @@ public class CalculatorPresenter: ICalculatorPresenter, IDisposable
         _view.OnCalculatePressed += CalculateExpression;
         _counterUsecase.OnOperationCompleteAction += OnOperationComplete;
         
-        _view.SetValueInField(GetInitialExpression());
+        string savedExpression = GetInitialExpression();
+        _view.SetValueInField(savedExpression ?? string.Empty);
     }
+
     public void CalculateExpression()
     {
         _counterUsecase.CalculateExpression();

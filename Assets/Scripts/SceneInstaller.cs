@@ -8,7 +8,8 @@ public class SceneInstaller : MonoInstaller
         var gateway = new ExpressionRepository();
         var storage = new PlayerPrefsDataStorage();
         var saverUsecase = new ExpressionStorageUseCase(gateway, storage);
-        var counterUsecase = new CounterUsecase(gateway);
+        var expresionEvalutor = new AdditionOnlyEvaluator();
+        var counterUsecase = new CounterUsecase(gateway, expresionEvalutor);
         
         Container.Bind<IExpressionRepository>().FromInstance(gateway);
         Container.Bind<IDataStorage>().FromInstance(storage);
